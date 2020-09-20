@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+
+<?php
+include_once('app/Sanitizer.php');
+
+$configPath = $argv[1];
+$dataPath = $argv[2];
+
+$sanitizer = new \App\Sanitizer($configPath, $dataPath);
+$sanitizer->sanitize();
+
+echo $sanitizer->data();
