@@ -13,10 +13,11 @@ class DepartmentRangeTest extends TestCase
 {
     /** @test */
     public function itShouldSalitizePasswordAndAuth() {
-        $config = new Config('./files/config_for_pass_and_auth');
-        $data = new Data('./files/data_with_pass_and_auth');
-        $sanitizer = new Sanitizer($config, $data);
-        $sanitizedData = $sanitizer->sanitize();
-        $this->assertJsonStringEqualsJsonFile('./files/sanitized_data_with_pass_and_auth', $sanitizedData);
+        $configPath = './tests/files/config_for_pass_and_auth';
+        $dataPath = './tests/files/data_with_pass_and_auth';
+        $sanitizer = new Sanitizer($configPath, $dataPath);
+        $sanitizer->sanitize();
+        $sanitizedData = trim(\file_get_contents('./tests/files/sanitized_data_with_pass_and_auth'));
+        $this->assertEquals($sanitizedData, $sanitizer->data());
     }
 }
