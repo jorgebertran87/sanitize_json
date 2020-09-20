@@ -9,9 +9,10 @@ use App\Sanitizer;
 
 class SanitizerTest extends TestCase
 {
-    private const CONFIG_PATH_PASS_AND_AUTH = './tests/files/config_for_pass_and_auth';
     private const DATA_PATH = './tests/files/data';
+    private const CONFIG_PATH_PASS_AND_AUTH = './tests/files/config_for_pass_and_auth';
     private const CONFIG_PATH_AUTH_PASS = './tests/files/config_for_auth_pass';
+    private const CONFIG_PATH_AUTH_USER_PASS = './tests/files/config_for_auth_user_pass';
 
     /** @test */
     public function itShouldSanitizePasswordAndAuth() {
@@ -44,6 +45,14 @@ class SanitizerTest extends TestCase
         $sanitizer = new Sanitizer(self::CONFIG_PATH_AUTH_PASS, self::DATA_PATH);
         $sanitizer->sanitize();
         $sanitizedData = trim(\file_get_contents('./tests/files/sanitized_data_with_auth_pass'));
+        $this->assertEquals($sanitizedData, $sanitizer->data());
+    }
+
+    /** @test */
+    public function itShouldSanitizeAuthUserPassword() {
+        $sanitizer = new Sanitizer(self::CONFIG_PATH_AUTH_USER_PASS, self::DATA_PATH);
+        $sanitizer->sanitize();
+        $sanitizedData = trim(\file_get_contents('./tests/files/sanitized_data_with_auth_user_pass'));
         $this->assertEquals($sanitizedData, $sanitizer->data());
     }
 }
