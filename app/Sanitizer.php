@@ -43,7 +43,8 @@ class Sanitizer
         }
 
         while (($configKey = fgets($handle)) !== false) {
-            $this->redactDataForConfigKey($configKey, $jsonData);
+            $parsedConfigKey = $this->parseConfigKey($configKey);
+            $this->redactDataForConfigKey($parsedConfigKey, $jsonData);
         }
 
         fclose($handle);
@@ -52,18 +53,27 @@ class Sanitizer
         $this->data .= $this->data === "" ? $encodedData : "\n$encodedData";
     }
 
-    private function redactDataForConfigKey(string $configKey, array &$jsonData): void {
-        $configKey = trim($configKey);
-
-        if (\array_key_exists($configKey, $jsonData)) {
-            $jsonData[$configKey] = self::REDACTED_CONTENT;
+    private function redactDataForConfigKey(array $configKey, array &$jsonData): void {
+        $firstConfigKey = array_shift($configKey);
+        if (count($configKey) > 0) {
+            $this->redactDataForConfigKey($configKey, $jsonData[$firstConfigKey]);
+        } elseif (is_array($jsonData) && \array_key_exists($firstConfigKey, $jsonData)) {
+                $jsonData[$firstConfigKey] = self::REDACTED_CONTENT;
         }
 
-        array_walk_recursive($jsonData, function(&$item, $key) use ($configKey) {
-            if ($key === $configKey) {
+        array_walk_recursive($jsonData, function(&$item, $key) use ($firstConfigKey, $configKey) {
+            if (count($configKey) > 0) {
+                if (is_array($item)) {
+                    $this->redactDataForConfigKey($configKey, $item);
+                }
+            } elseif ($key === $firstConfigKey) {
                 $item = self::REDACTED_CONTENT;
             }
         });
+    }
+
+    private function parseConfigKey(string $configKey): array {
+        return explode('.', trim($configKey));
     }
 
     public function data(): string {
