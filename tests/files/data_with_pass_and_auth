@@ -1,0 +1,2 @@
+{"password": "secret", "auth": {"name": "frank", "pass": "abc123"}, "extra": [{"auth": "secret123", "x": 42}, "ccnum"], "ccnum": "123456"}
+{"passwd": "secret", "auth": {"name": "frank", "pass": "abc123"}, "extra": [{"auth": "secret123", "x": 42}, "ccnum"]}
