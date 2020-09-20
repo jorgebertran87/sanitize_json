@@ -21,7 +21,7 @@ class Sanitizer
     }
 
     public function sanitize(): void {
-        $handle = fopen($this->dataPath, "r");
+        $handle = @fopen($this->dataPath, "r");
         if ($handle === false) {
             throw new Exception("Data $this->dataPath not found");
         }
@@ -37,7 +37,7 @@ class Sanitizer
         $data = trim($data);
         $jsonData = json_decode($data, true);
 
-        $handle = fopen($configPath, "r");
+        $handle = @fopen($configPath, "r");
         if ($handle === false) {
             throw new Exception("Config $configPath not found");
         }
