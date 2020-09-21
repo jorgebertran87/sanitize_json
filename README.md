@@ -8,9 +8,54 @@ PHP 7.4
 ### The config structure has the key to be redacted separated by new line:
 
 ### Examples:
-`auth.user.password` will replace all the passwords contained into the level `auth -> ... -> user -> ... -> password` with asterisks
+`auth.user.password` will replace all the passwords contained into the level `auth -> ... -> user -> ... -> password` with asterisks (this way we can hide some specific keys in a specific level)
 
-`extra` will replace all the extra info with asterisks
+Config:
+
+```
+auth.user.password
+```
+
+Data Input:
+
+```
+{"password": "secret", "auth": {"name": "frank", "password": "abc123"}, "extra": [{"auth": "secret123", "x": 42}, "password"]}
+{"passwd": "secret", "auth": {"name": "frank", "password": "abc123"}, "extra": [{"auth": "secret123", "x": 42}]}
+{"auth": {"user": {"name": "jorge", "password": "test"}}}
+```
+
+Data Output:
+
+```
+{"password":"secret","auth":{"name":"frank","password":"abc123"},"extra":[{"auth":"secret123","x":42},"password"]}
+{"passwd":"secret","auth":{"name":"frank","password":"abc123"},"extra":[{"auth":"secret123","x":42}]}
+{"auth":{"user":{"name":"jorge","password":"******"}}}
+```
+
+`password` and `auth` will replace all the info related with both keys with asterisks
+
+Config:
+
+```
+password
+auth
+```
+
+Input:
+
+```
+{"password": "secret", "auth": {"name": "frank", "password": "abc123"}, "extra": [{"auth": "secret123", "x": 42}, "password"]}
+{"passwd": "secret", "auth": {"name": "frank", "password": "abc123"}, "extra": [{"auth": "secret123", "x": 42}]}
+{"auth": {"user": {"name": "jorge", "password": "test"}}}
+```
+
+Output:
+
+```
+{"password":"******","auth":"******","extra":[{"auth":"******","x":42},"password"]}
+{"passwd":"secret","auth":"******","extra":[{"auth":"******","x":42}]}
+{"auth":"******"}
+```
 
 ## Steps
 
