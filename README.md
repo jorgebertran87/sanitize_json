@@ -41,7 +41,7 @@ password
 auth
 ```
 
-Input:
+Data Input:
 
 ```
 {"password": "secret", "auth": {"name": "frank", "password": "abc123"}, "extra": [{"auth": "secret123", "x": 42}, "password"]}
@@ -49,7 +49,7 @@ Input:
 {"auth": {"user": {"name": "jorge", "password": "test"}}}
 ```
 
-Output:
+Data Output:
 
 ```
 {"password":"******","auth":"******","extra":[{"auth":"******","x":42},"password"]}
@@ -65,7 +65,7 @@ Output:
 ```
 
 ## Optional
-### Install docker and run following commands:
+### Install docker and run the following command:
 
 Create php-cli + composer container
 ```
